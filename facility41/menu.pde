@@ -1,10 +1,10 @@
 HashMap<String, Object[]> menu_buttons = new HashMap<String, Object[]>();
 
 void menu_setup() {
-    menu_buttons.put("single_player", new Object[]{ ((width/2)-280), height/2, 560, 50, "Single Player", 24.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
-    menu_buttons.put("multi_player", new Object[]{ ((width/2)-280), (height/2)+65, 560, 50, "Multiplayer", 24.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
-    menu_buttons.put("credits", new Object[]{ ((width/2)-280), (height/2)+130, 270, 50, "Credits", 18.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
-    menu_buttons.put("quit", new Object[]{ ((width/2)+10), (height/2)+130, 270, 50, "Quit", 18.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
+    menu_buttons.put("single_player", new Object[]{ ((width/2)+100), height/2-200,   560, 50, "Single Player", 24.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
+    menu_buttons.put("multi_player", new Object[]{ ((width/2)+100), (height/2)-135, 560, 50, "Multiplayer", 24.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
+    menu_buttons.put("credits", new Object[]{ ((width/2)+100), (height/2)-70, 270, 50, "Credits", 18.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
+    menu_buttons.put("quit", new Object[]{ ((width/2)+390), (height/2)-70, 270, 50, "Quit", 18.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
 }
 
 String menu_button_clicked() {
@@ -26,6 +26,9 @@ void menu() {
   background(#7D8CA3);
   float bg_x = (width - bg_main.width) / 2;
   image(bg_main, bg_x, 0);
+  // image(title_text, 100, 100);
+
+
   //Init buttons
   for (String id : menu_buttons.keySet()) {
     Object[] data = menu_buttons.get(id);

@@ -61,3 +61,37 @@ void startPopup(String title,  HashMap<String, Object[]> options) {
 void closePopup() {
   POPUP = false;
 }
+
+int progress = 0;
+float fade = 255;
+boolean loadingBarDone = false;
+void loadingBar() {
+    log("INFO", "Progress == " + progress);
+          log("INFO", "Progress 2== " + progress);
+    if (fade == 255) {
+    progress += 1;
+    }
+    rectMode(CORNER);
+    fill(0,0,0, (fade));
+    rect(0,0,width,height);  
+    // background(0,0,0,(progress));
+          rectMode(CORNER);
+
+      stroke(0,0,0,0);
+      fill(255,255,255);
+      textSize(20);
+      text(progress + "%", width/2, height/2 - 50);
+          fill(23,200,100, fade);
+      rect(width/2-100, height/2, progress*2, 30);
+
+    if (progress >= 100) {
+      fade -=3;
+  
+  }
+
+  if (fade == 0) {
+    fade = 255;
+          progress = 0;
+        loadingBarDone = true;
+  }
+}

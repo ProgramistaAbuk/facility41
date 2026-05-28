@@ -2,6 +2,12 @@ enum Screen {
   MAIN_MENU, SINGLE_PLAYER, MULTI_PLAYER_CREATE, CREDITS, LEVELS
 }
 
+enum Level {
+  ONE,TWO,THREE,FOUR, NONE
+}
+
+Level level = Level.NONE;
+
 Screen screen = Screen.MAIN_MENU;
 HashMap<Integer, String> diff_map = new HashMap<Integer, String>();
 
@@ -18,6 +24,7 @@ void setup() {
   font_setup();
   img_load();
   levels_setup();
+  credits_setup();
 
   diff_map.put(0, "Easy");
   diff_map.put(1, "Medium");
@@ -39,6 +46,7 @@ void draw() {
       mp_c();
       break;
     case CREDITS:
+      credits();
       break;
 
     }
@@ -73,6 +81,9 @@ void keyPressed() {
 
 }   
 void mouseClicked() {
+  if (!loadingBarDone) {
+    progress += 25;
+  }
   switch (screen) {
     case MAIN_MENU:
       String menu_buttonPressed = menu_button_clicked();
@@ -85,6 +96,8 @@ void mouseClicked() {
           screen = Screen.MULTI_PLAYER_CREATE;
           break;
         case "credits":
+          screen = Screen.CREDITS;
+          loadingBarDone = false;
           break;
         case "quit":
           log("INFO", "Exiting");
@@ -97,6 +110,22 @@ void mouseClicked() {
       switch (levels_pressed) {
         case "back":
           screen = Screen.MAIN_MENU;
+          break;
+        case "1":
+          log("INFO", "Level 1 selected");
+          level = Level.ONE;
+          break;
+        case "2":
+          log("INFO", "Level 2 selected");  
+          level = Level.TWO;
+          break;
+        case "3":
+          log("INFO", "Level 3 selected");
+          level = Level.THREE;
+          break;
+        case "4":
+          log("INFO", "Level 4 selected");
+          level = Level.FOUR;
           break;
       }
       break;
@@ -147,6 +176,12 @@ void mouseClicked() {
 
       break;
     case CREDITS:
+      String cbp = credits_button_clicked();
+      switch (cbp) {
+        case "back":
+          screen = Screen.MAIN_MENU;
+          break;
+      }
       break;
   }
 
