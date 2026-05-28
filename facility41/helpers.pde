@@ -41,10 +41,11 @@ void popup(String title, HashMap<String, Object[]> options) {
             float txtSz =(Float)data[5];
             color btnC = (Integer) data[6];
             color txtC = (Integer)data[7];
+            color border = (Integer)data[8];
             if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h) {
-            menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, true);
+            menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, border, true);
             } else {
-            menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, false);
+            menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC,border, false);
             }
 
         }

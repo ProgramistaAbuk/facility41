@@ -1,10 +1,10 @@
 HashMap<String, Object[]> menu_buttons = new HashMap<String, Object[]>();
 
 void menu_setup() {
-    menu_buttons.put("single_player", new Object[]{ ((width/2)-280), 475, 560, 50, "Single Player", 24.0f, color(0,0,0), color(255,255,255) });
-    menu_buttons.put("multi_player", new Object[]{ ((width/2)-280), 535, 560, 50, "Multiplayer", 24.0f, color(0,0,0), color(255,255,255) });
-    menu_buttons.put("credits", new Object[]{ ((width/2)-280), 595, 270, 50, "Credits", 18.0f, color(0,0,0), color(255,255,255) });
-    menu_buttons.put("quit", new Object[]{ ((width/2)+10), 595, 270, 50, "Quit", 18.0f, color(0,0,0), color(255,255,255) });
+    menu_buttons.put("single_player", new Object[]{ ((width/2)-280), height/2, 560, 50, "Single Player", 24.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
+    menu_buttons.put("multi_player", new Object[]{ ((width/2)-280), (height/2)+65, 560, 50, "Multiplayer", 24.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
+    menu_buttons.put("credits", new Object[]{ ((width/2)-280), (height/2)+130, 270, 50, "Credits", 18.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
+    menu_buttons.put("quit", new Object[]{ ((width/2)+10), (height/2)+130, 270, 50, "Quit", 18.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
 }
 
 String menu_button_clicked() {
@@ -37,10 +37,11 @@ void menu() {
     float txtSz =(Float)data[5];
     color btnC = (Integer) data[6];
     color txtC = (Integer)data[7];
+    color border = (Integer)data[8];
     if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h) {
-      menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, true);
+      menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, border, true);
     } else {
-      menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, false);
+      menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, border, false);
     }
 
   }
@@ -58,16 +59,16 @@ void menu() {
 }
 
 
-void menu_makeButton(int x, int y, int w, int h, String txt, float txtSize, color btnColor, color textColor,  boolean hover) {
+void menu_makeButton(int x, int y, int w, int h, String txt, float txtSize, color btnColor, color textColor, color border, boolean hover) {
   pushStyle();
   rectMode(CORNER);
 
   if (hover) {
     fill(red(btnColor), green(btnColor), blue(btnColor), 200);
-    stroke(255,255,255);
+    stroke(red(border), green(border), blue(border),200);
   } else {
     fill(btnColor);
-    stroke(0, 50);
+    stroke(border);
   }
 
   rect(x, y, w, h, 4);

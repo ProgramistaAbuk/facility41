@@ -1,9 +1,10 @@
 enum Screen {
-  MAIN_MENU, SINGLE_PLAYER, MULTI_PLAYER_CREATE, CREDITS
+  MAIN_MENU, SINGLE_PLAYER, MULTI_PLAYER_CREATE, CREDITS, LEVELS
 }
 
 Screen screen = Screen.MAIN_MENU;
 HashMap<Integer, String> diff_map = new HashMap<Integer, String>();
+
 
 void setup() {
   log("INFO", "Starting");
@@ -16,6 +17,7 @@ void setup() {
   //Setup fonts
   font_setup();
   img_load();
+  levels_setup();
 
   diff_map.put(0, "Easy");
   diff_map.put(1, "Medium");
@@ -29,6 +31,9 @@ void draw() {
       menu();
       break;
     case SINGLE_PLAYER:
+      break;
+    case LEVELS:
+      levels();
       break;
     case MULTI_PLAYER_CREATE:
       mp_c();
@@ -74,6 +79,7 @@ void mouseClicked() {
       log("INFO", "Mouse pressed button: " + menu_buttonPressed);
       switch (menu_buttonPressed) {
         case "single_player":
+          screen = Screen.LEVELS;
           break;
         case "multi_player":
           screen = Screen.MULTI_PLAYER_CREATE;
@@ -83,6 +89,15 @@ void mouseClicked() {
         case "quit":
           log("INFO", "Exiting");
           exit();
+      }
+      break;
+    case LEVELS:
+      String levels_pressed = levels_buttonPressed();
+      log("INFO", "Mouse pressed button: " + levels_pressed);
+      switch (levels_pressed) {
+        case "back":
+          screen = Screen.MAIN_MENU;
+          break;
       }
       break;
     case SINGLE_PLAYER:
