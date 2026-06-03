@@ -74,6 +74,8 @@ void menu_makeButton(int x, int y, int w, int h, String txt, float txtSize, colo
     stroke(border);
   }
 
+
+  
   rect(x, y, w, h, 4);
 
   textAlign(CENTER, CENTER);
