@@ -1,10 +1,10 @@
 HashMap<String, Object[]> menu_buttons = new HashMap<String, Object[]>();
 
 void menu_setup() {
-    menu_buttons.put("single_player", new Object[]{ ((width/2)+100), height/2-200,   560, 50, "Single Player", 24.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
-    menu_buttons.put("multi_player", new Object[]{ ((width/2)+100), (height/2)-135, 560, 50, "Multiplayer", 24.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
-    menu_buttons.put("credits", new Object[]{ ((width/2)+100), (height/2)-70, 270, 50, "Credits", 18.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
-    menu_buttons.put("quit", new Object[]{ ((width/2)+390), (height/2)-70, 270, 50, "Quit", 18.0f, color(0,0,0), color(255,255,255), color(0,0,0) });
+    menu_buttons.put("single_player", new Object[]{ ((width/2)+100), height/2-200,   560, 50, "Single Player", 24.0f, color(0,0,0), color(255,255,255), color(0,0,0), -1 });
+    menu_buttons.put("multi_player", new Object[]{ ((width/2)+100), (height/2)-135, 560, 50, "Multiplayer", 24.0f, color(0,0,0), color(255,255,255), color(0,0,0), -1 });
+    menu_buttons.put("credits", new Object[]{ ((width/2)+100), (height/2)-70, 270, 50, "Credits", 18.0f, color(0,0,0), color(255,255,255), color(0,0,0), -1 });
+    menu_buttons.put("quit", new Object[]{ ((width/2)+390), (height/2)-70, 270, 50, "Quit", 18.0f, color(0,0,0), color(255,255,255), color(0,0,0), -1 });
 }
 
 String menu_button_clicked() {
@@ -41,10 +41,11 @@ void menu() {
     color btnC = (Integer) data[6];
     color txtC = (Integer)data[7];
     color border = (Integer)data[8];
+    int alpha_count = (Integer)data[9];
     if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h) {
-      menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, border, true);
+      menu_buttons.put(id, menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, border, alpha_count, true)) ;
     } else {
-      menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, border, false);
+      menu_buttons.put(id, menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, border, alpha_count, false)) ;
     }
 
   }
@@ -62,17 +63,25 @@ void menu() {
 }
 
 
-void menu_makeButton(int x, int y, int w, int h, String txt, float txtSize, color btnColor, color textColor, color border, boolean hover) {
+Object[] menu_makeButton(int x, int y, int w, int h, String txt, float txtSize, color btnColor, color textColor, color border, int alpha_count, boolean hover) {
   pushStyle();
   rectMode(CORNER);
 
-  if (hover) {
-    fill(red(btnColor), green(btnColor), blue(btnColor), 200);
-    stroke(red(border), green(border), blue(border),200);
-  } else {
-    fill(btnColor);
-    stroke(border);
-  }
+  if (hover && alpha_count > -50) {
+    alpha_count -= 5;
+    log("INFO", "Subs to alpha_count: " + alpha_count);
+  } else if (hover == false && alpha_count < 51) {
+    alpha_count += 5;
+    log("INFO", "Adding to alpha_count: " + alpha_count);
+  } 
+
+  // if (hover) {
+    fill(red(btnColor), green(btnColor), blue(btnColor), alpha(btnColor)-alpha_count);
+    stroke(red(border), green(border), blue(border),alpha(btnColor)-alpha_count);
+  // } else {
+    //   fill(red(btnColor), green(btnColor), blue(btnColor), alpha(btnColor)-alpha_count);
+    // stroke(red(border), green(border), blue(border),alpha(btnColor)-alpha_count);
+  // }
 
 
   
@@ -87,4 +96,17 @@ void menu_makeButton(int x, int y, int w, int h, String txt, float txtSize, colo
 
   text(txt, centerX, centerY);
   popStyle();
+
+  return new Object[]{ 
+    x,         
+    y,            
+    w,          
+    h,          
+    txt,          
+    txtSize,        
+    btnColor,        
+    textColor,          
+    border,        
+    alpha_count    
+  };
 }

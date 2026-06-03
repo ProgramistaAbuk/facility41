@@ -38,6 +38,7 @@ void draw() {
       menu();
       break;
     case SINGLE_PLAYER:
+      single_player();
       break;
     case LEVELS:
       levels();
@@ -81,9 +82,6 @@ void keyPressed() {
 
 }   
 void mouseClicked() {
-  if (!loadingBarDone) {
-    progress += 25;
-  }
   switch (screen) {
     case MAIN_MENU:
       String menu_buttonPressed = menu_button_clicked();
@@ -114,18 +112,22 @@ void mouseClicked() {
         case "1":
           log("INFO", "Level 1 selected");
           level = Level.ONE;
+          screen = Screen.SINGLE_PLAYER;
           break;
         case "2":
           log("INFO", "Level 2 selected");  
           level = Level.TWO;
+          screen = Screen.SINGLE_PLAYER;
           break;
         case "3":
           log("INFO", "Level 3 selected");
           level = Level.THREE;
+          screen = Screen.SINGLE_PLAYER;
           break;
         case "4":
           log("INFO", "Level 4 selected");
           level = Level.FOUR;
+          screen = Screen.SINGLE_PLAYER;
           break;
       }
       break;

@@ -42,10 +42,11 @@ void popup(String title, HashMap<String, Object[]> options) {
             color btnC = (Integer) data[6];
             color txtC = (Integer)data[7];
             color border = (Integer)data[8];
+            int alpha_count = (Integer)data[9];
             if (mouseX > x && mouseX < x+w && mouseY > y && mouseY < y+h) {
-            menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, border, true);
+                    options.put(id, menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, border, alpha_count, true)) ;
             } else {
-            menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC,border, false);
+                    options.put(id, menu_makeButton(x,y,w,h,txt,txtSz,btnC,txtC, border, alpha_count, false)) ;
             }
 
         }
@@ -65,6 +66,7 @@ void closePopup() {
 int progress = 0;
 float fade = 255;
 boolean loadingBarDone = false;
+
 void loadingBar() {
     log("INFO", "Progress == " + progress);
           log("INFO", "Progress 2== " + progress);
