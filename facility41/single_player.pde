@@ -41,37 +41,37 @@ void levels() {
     float bg_x = (width - bg_levels.width) / 2;
     image(bg_levels, bg_x, 0);
     fill(0,0,0,100);
-    int change_amount = 20;
-    // rect(level_rect_x, 0, width_rect, height);
+   int change_amount = width / 96;
 
-    if (mouseX > (width/4)*3 && level_rect_x < ((width/4)*3)+change_amount) {
-        level_rect_x += change_amount;
-        leveler = "4";
-    } else if (mouseX < (width/4)*3 && level_rect_x > ((width/4)*2)) {
-        level_rect_x -= change_amount;
-        leveler = "3";
-    }
+if (mouseX > (width/4)*3 && level_rect_x < ((width/4)*3) + change_amount) {
+    level_rect_x += change_amount;
+    leveler = "4";
+} else if (mouseX < (width/4)*3 && level_rect_x > (width/4)*2) {
+    level_rect_x -= change_amount;
+    leveler = "3";
+}
 
-    if (mouseX > (width/4)*2 && level_rect_x < (width/4)*2) {
-        level_rect_x += change_amount;
-        leveler = "3";
-    } else if (mouseX < (width/4)*2 && level_rect_x > (width/4)-change_amount) {
-        level_rect_x -= change_amount;
-        width_rect = (width/4)+20;
-        leveler = "2";
-    }
-    
-    if (mouseX > width/4 && level_rect_x < (width/4)-change_amount) {
-        level_rect_x += change_amount;
-        leveler = "2";
-        width_rect = (width/4)+20;
-    } else if (mouseX < width/4 && level_rect_x > 0) {
-        level_rect_x -= change_amount;
-        leveler = "1";
-        width_rect = (width/4)-20;
-    }
-    btn[0] = level_rect_x;
-    btn[2] = width_rect;
+if (mouseX > (width/4)*2 && level_rect_x < (width/4)*2) {
+    level_rect_x += change_amount;
+    leveler = "3";
+} else if (mouseX < (width/4)*2 && level_rect_x > (width/4) - change_amount) {
+    level_rect_x -= change_amount;
+    width_rect = (width/4) + change_amount;
+    leveler = "2";
+}
+
+if (mouseX > width/4 && level_rect_x < (width/4) - change_amount) {
+    level_rect_x += change_amount;
+    leveler = "2";
+    width_rect = (width/4) + change_amount;
+} else if (mouseX < width/4 && level_rect_x > 0) {
+    level_rect_x -= change_amount;
+    leveler = "1";
+    width_rect = (width/4) - change_amount;
+}
+
+btn[0] = level_rect_x;
+btn[2] = width_rect;
 
 
     for (String id : level_buttons.keySet()) {
@@ -96,14 +96,65 @@ void levels() {
 
 }
 
+int player_x, player_y;
 
+void single_player_setup() {
+    player_x = (width / 2) - 50;   // centered: subtract half the rect width
+    player_y = height - 100;
+}
+int screenW = 1920;
+int screenH = 1080;
+int cols = 3;
+int rows = 3;
+int cellW = screenW / cols;
+int cellH = screenH / rows;
+int bgCols = 5;
+int bgRows = 3;
+int bgW = screenW * bgCols;  // total background width
+int bgH = screenH * bgRows;  // total background height
+
+// Camera offset (how much the background is shifted)
+int camX = 0;
+int camY = 0;
+void drawBackground() {
+    pushMatrix();
+    translate(-camX, -camY);  // shift entire background by camera
+
+    for (int row = 0; row < rows * bgRows; row++) {
+        for (int col = 0; col < cols * bgCols; col++) {
+            fill(0);
+            stroke(255);
+            rect(col * cellW, row * cellH, cellW, cellH);
+        }
+    }
+
+    popMatrix();
+}
 void single_player() {
     background(0,0,0);
     // log("ERROR", "in single player func");
+    
+
     if (!loadingBarDone) {
         loadingBar();
         // progress = 100;
     }
+    // int cols = 3;
+    // int rows = 3;
+    // int rectW = width / cols;
+    // int rectH = height / rows;
+
+    // for (int row = 0; row < rows; row++) {
+    //     for (int col = 0; col < cols; col++) {
+    //         fill(0);
+    //         stroke(255);
+    //         rect(col * rectW, row * rectH, rectW, rectH);
+    //     }
+    // }
+    drawBackground();
+    camX = constrain(camX, 0, bgW - screenW);
+camY = constrain(camY, 0, bgH - screenH);
+    rect(player_x, player_y, 100,100);
     switch (level) {
         case ONE:
             break;

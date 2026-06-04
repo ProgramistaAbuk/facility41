@@ -25,6 +25,7 @@ void setup() {
   img_load();
   levels_setup();
   credits_setup();
+  single_player_setup();
 
   diff_map.put(0, "Easy");
   diff_map.put(1, "Medium");
@@ -57,6 +58,20 @@ void draw() {
   String pass_text = "";
 void keyPressed() {
   Object[] btn = (Object[]) mp_buttons.get("pass");
+  if (key == 'd') {
+    camX += 10;  // scroll right
+  }
+  if (key == 'a') {
+    camX -= 10;  // scroll left
+  }
+  if (key == 's') {
+    camY += 10;  // scroll down
+
+  }
+  if (key == 'w') {
+    camY -= 10;  // scroll up
+  }
+  
   if (pass_type_selected) {
 
 

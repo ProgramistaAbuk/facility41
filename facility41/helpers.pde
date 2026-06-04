@@ -31,6 +31,7 @@ void popup(String title, HashMap<String, Object[]> options) {
   rectMode(CORNER);
   fill(#231942);
   rect(width/2-300, 300, 600, 500, 10);
+  // text(title, (width/2)-300, 300);
    for (String id : options.keySet()) {
             Object[] data = options.get(id);
             int x = (Integer)data[0];
