@@ -98,3 +98,26 @@ void loadingBar() {
         loadingBarDone = true;
   }
 }
+boolean jumping = false;
+boolean goingUp = false;
+float og_pos;
+int jump_limit = 100;
+
+float playerYVelocity = 0; // How fast the player is moving up/down
+float gravity = 0.6;        // How hard gravity pulls down each frame
+float jumpStrength = -15;   // The initial upward burst (negative moves UP)
+void jump() {
+  // 1. Apply gravity to velocity (pulls the player downward over time)
+  playerYVelocity += gravity;
+  
+  // 2. Move the player by their current velocity
+  player_y += playerYVelocity;
+  
+  // 3. Check for floor collision (so they don't fall forever)
+  float floorY = height - 100 - cellH;
+  if (player_y >= floorY) {
+    player_y = floorY;     // Snap to exact floor position
+    playerYVelocity = 0;   // Stop moving downward
+    jumping = false;       // Reset jumping state flag
+  }
+}

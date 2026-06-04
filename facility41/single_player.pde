@@ -96,11 +96,11 @@ btn[2] = width_rect;
 
 }
 
-int player_x, player_y;
+float player_x, player_y;
 
 void single_player_setup() {
     player_x = (width / 2) - 50;   // centered: subtract half the rect width
-    player_y = height - 100;
+    player_y = height - 100 - cellH;
 }
 int screenW = 1920;
 int screenH = 1080;
@@ -115,7 +115,7 @@ int bgH = screenH * bgRows;  // total background height
 
 // Camera offset (how much the background is shifted)
 int camX = 0;
-int camY = 0;
+int camY = bgH - screenH; // 3240 - 1080 = 2160
 void drawBackground() {
     pushMatrix();
     translate(-camX, -camY);  // shift entire background by camera
@@ -130,6 +130,9 @@ void drawBackground() {
 
     popMatrix();
 }
+boolean bgMove = true;
+boolean leftBg = false;
+boolean rightBg = false;
 void single_player() {
     background(0,0,0);
     // log("ERROR", "in single player func");
@@ -152,8 +155,34 @@ void single_player() {
     //     }
     // }
     drawBackground();
-    camX = constrain(camX, 0, bgW - screenW);
-camY = constrain(camY, 0, bgH - screenH);
+    // log("TEST", "CAMX CAMY" + camX  + " | " +  camY);
+    // if (camX == 0) {
+    //     bgMove = false;
+    //     leftBg = true;
+    // } else if (camX > 7680) {
+    //     bgMove = false;
+    //     rightBg = true;
+    // }
+     if (player_x > (width/2) - 50 && leftBg){
+        player_x = (width/2) - 50;
+        bgMove = true;
+        leftBg = false;
+    } else if (player_x < (width/2) - 50 && rightBg) {
+        player_x = (width/2) - 50;
+        bgMove = true;
+        rightBg = false;
+    }
+
+    // if ( player_y height - 100)
+    // if (camX > 7680) {
+    //     bgMove = false;
+    //     rightBg = true;
+    // }  else if ()
+    // if (bgMove) {
+    //     camX = constrain(camX, 0, bgW - screenW);
+    //     camY = constrain(camY, 0, bgH - screenH);
+    // }
+
     rect(player_x, player_y, 100,100);
     switch (level) {
         case ONE:

@@ -32,8 +32,41 @@ void setup() {
   diff_map.put(2, "Hard");
   diff_map.put(3, "Extreme");
 }
-
+float moveXVelocity = 0;
+float moveYVelocity = 0;
+float acceleration = 1.5; // How fast you speed up
+float friction = 0.82;     // How fast you slow down (0.0 = instant stop, 1.0 = ice)
+float maxSpeed = 10;       // Speed limit
 void draw() {
+jump();
+
+// 1. Calculate target velocity based on keys pressed
+if (movingRight) moveXVelocity += acceleration;
+if (movingLeft)  moveXVelocity -= acceleration;
+if (movingDown)  moveYVelocity += acceleration;
+if (movingUp)    moveYVelocity -= acceleration;
+
+// 2. Apply passive friction so they smoothly slide to a stop when keys are released
+if (!movingRight && !movingLeft) moveXVelocity *= friction;
+if (!movingDown && !movingUp)    moveYVelocity *= friction;
+
+// 3. Keep the speeds within your designated max speed limit
+moveXVelocity = constrain(moveXVelocity, -maxSpeed, maxSpeed);
+moveYVelocity = constrain(moveYVelocity, -maxSpeed, maxSpeed);
+
+// 4. Your exact structural check, now completely smooth!
+if (bgMove) {
+  // Apply the velocity to the Camera
+  camX += moveXVelocity;
+  camY += moveYVelocity;
+  
+  camX = constrain(camX, 0, bgW - screenW);
+  camY = constrain(camY, 0, bgH - screenH);
+} else {
+  // Apply the velocity to the Player
+  player_x += moveXVelocity;
+  player_y += moveYVelocity;
+}
   switch (screen) {
     case MAIN_MENU:
       menu();
@@ -56,24 +89,42 @@ void draw() {
 
 
   String pass_text = "";
+  boolean movingRight = false;
+  boolean movingLeft = false;
+  boolean movingDown = false;
+  boolean movingUp = false;
+
+void keyReleased() {
+  if (key == 'd' || keyCode == RIGHT) movingRight = false;
+  if (key == 'a' || keyCode == LEFT)  movingLeft = false;
+  if (key == 's' || keyCode == DOWN)  movingDown = false;
+  if (key == 'w' || keyCode == UP)    movingUp = false;
+}
+
 void keyPressed() {
   Object[] btn = (Object[]) mp_buttons.get("pass");
-  if (key == 'd') {
-    camX += 10;  // scroll right
+  if (key == 'd' || keyCode == RIGHT) {
+    movingRight = true;
+    if  (camX == 7680) {
+        bgMove = false;
+        rightBg = true;
+      }
   }
-  if (key == 'a') {
-    camX -= 10;  // scroll left
+  if (key == 'a' || keyCode == LEFT) { 
+    movingLeft = true;
+    if  (camX == 0) {
+        bgMove = false;
+        leftBg = true;
+      }
   }
-  if (key == 's') {
-    camY += 10;  // scroll down
-
-  }
-  if (key == 'w') {
-    camY -= 10;  // scroll up
+  if (key == 's' || keyCode == DOWN)  movingDown = true;
+  if (key == 'w' || keyCode == UP)    movingUp = true;
+if (key == ' ' && !jumping) { // Prevent infinite mid-air jumps
+    playerYVelocity = jumpStrength; // Launch upward!
+    jumping = true;
   }
   
   if (pass_type_selected) {
-
 
     if (key == '\n' || key == '\r') {
       log("INFO", "Done typing");
