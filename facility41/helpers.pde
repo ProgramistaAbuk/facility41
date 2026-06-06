@@ -121,3 +121,7 @@ void jump() {
     jumping = false;       // Reset jumping state flag
   }
 }
+
+void add_platform (int x, int y, int w, int h) {
+  
+}

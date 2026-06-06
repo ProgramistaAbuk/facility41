@@ -101,21 +101,31 @@ float player_x, player_y;
 void single_player_setup() {
     player_x = (width / 2) - 50;   // centered: subtract half the rect width
     player_y = height - 100 - cellH;
+    screenW = displayWidth;
+    screenH = displayHeight;
+    cellW = screenW / cols;
+    cellH = screenH / rows;
+    bgW = screenW * bgCols;  // total background width
+    bgH = screenH * bgRows;  // total background height
+    camX = 0;
+    camY = bgH - screenH; // 3240 - 1080 = 2160
+    maxCamX = bgW - screenW; 
 }
 int screenW = 1920;
 int screenH = 1080;
 int cols = 3;
 int rows = 3;
-int cellW = screenW / cols;
-int cellH = screenH / rows;
+int cellW = 0;
+int cellH = 0;
 int bgCols = 5;
 int bgRows = 3;
-int bgW = screenW * bgCols;  // total background width
-int bgH = screenH * bgRows;  // total background height
+int bgW = 0;  // total background width
+int bgH = 0;  // total background height
+int maxCamX;
 
 // Camera offset (how much the background is shifted)
 int camX = 0;
-int camY = bgH - screenH; // 3240 - 1080 = 2160
+int camY = 0; // 3240 - 1080 = 2160
 void drawBackground() {
     pushMatrix();
     translate(-camX, -camY);  // shift entire background by camera
@@ -123,13 +133,24 @@ void drawBackground() {
     for (int row = 0; row < rows * bgRows; row++) {
         for (int col = 0; col < cols * bgCols; col++) {
             fill(0);
+            log("DEBUG", "Row and column stats" + row + "|" + col);
             stroke(255);
-            rect(col * cellW, row * cellH, cellW, cellH);
+            if (row == 8) {
+                tile_ground_straight.resize(cellW, cellH);
+                // tint(255,64);
+                image(tile_ground_straight, col*cellW, row*cellH);
+                // drawGround(col*cellW, row*cellH);
+            } else {
+                tint(255,255);
+                rect(col * cellW, row * cellH, cellW, cellH);
+            }
+            tint(255,255);
         }
     }
 
     popMatrix();
 }
+
 boolean bgMove = true;
 boolean leftBg = false;
 boolean rightBg = false;

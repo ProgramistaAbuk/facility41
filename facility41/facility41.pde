@@ -15,7 +15,7 @@ HashMap<Integer, String> diff_map = new HashMap<Integer, String>();
 void setup() {
   log("INFO", "Starting");
   fullScreen();
-  size(1920, 1080);
+  size(1920, 1080, P2D);
   //Menu buttons init
   menu_setup();
   mp_c_setup();
@@ -103,9 +103,10 @@ void keyReleased() {
 
 void keyPressed() {
   Object[] btn = (Object[]) mp_buttons.get("pass");
+  log("INFO", "MOVING key, camX, camY, playerX, playerY" + key + "|" + camX + "|" + camY + "|" + player_x + "|" + player_y);
   if (key == 'd' || keyCode == RIGHT) {
     movingRight = true;
-    if  (camX == 7680) {
+    if  (camX == maxCamX) {
         bgMove = false;
         rightBg = true;
       }

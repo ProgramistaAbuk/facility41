@@ -2,6 +2,7 @@ PImage bg_main;
 PImage bg_levels;
 PImage title_text;
 PImage credits;
+PImage tile_ground_straight;
 
 void img_load() {
     bg_main = loadImage("bg_main.png");
@@ -15,4 +16,11 @@ void img_load() {
 
     credits = loadImage("credits.png");
     credits.resize(0,height);
+
+    tilesLoad();
+}
+
+void tilesLoad() {
+    tile_ground_straight = loadImage("tiles/tile_ground_straight2.png");
+
 }
