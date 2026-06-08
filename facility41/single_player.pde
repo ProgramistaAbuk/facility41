@@ -97,10 +97,11 @@ btn[2] = width_rect;
 }
 
 float player_x, player_y;
-
+float player_w = 100;
+float player_h = 100;
 void single_player_setup() {
-    player_x = (width / 2) - 50;   // centered: subtract half the rect width
-    player_y = height - 100 - cellH;
+    player_x = (width / 2) - player_w/2;   // centered: subtract half the rect width
+    player_y = height - player_h - cellH;
     screenW = displayWidth;
     screenH = displayHeight;
     cellW = screenW / cols;
@@ -133,7 +134,7 @@ void drawBackground() {
     for (int row = 0; row < rows * bgRows; row++) {
         for (int col = 0; col < cols * bgCols; col++) {
             fill(0);
-            log("DEBUG", "Row and column stats" + row + "|" + col);
+            // log("DEBUG", "Row and column stats" + row + "|" + col);
             stroke(255);
             if (row == 8) {
                 tile_ground_straight.resize(cellW, cellH);
@@ -154,10 +155,13 @@ void drawBackground() {
 boolean bgMove = true;
 boolean leftBg = false;
 boolean rightBg = false;
+float actual_player_x, actual_player_y;
 void single_player() {
     background(0,0,0);
     // log("ERROR", "in single player func");
-    
+    stroke(255,255,255);
+    update_platforms();
+
 
     if (!loadingBarDone) {
         loadingBar();
@@ -176,6 +180,16 @@ void single_player() {
     //     }
     // }
     drawBackground();
+        fill(255);
+    textSize(25);
+    if (bgMove) {
+        actual_player_x = player_x + camX;
+actual_player_y = (height - player_y - player_h) - cellH;
+    } else  {
+        actual_player_x = player_x;
+actual_player_y = (height - player_y - player_h) - cellH;
+    }
+text(actual_player_x + "," + actual_player_y, width/2,100);   
     // log("TEST", "CAMX CAMY" + camX  + " | " +  camY);
     // if (camX == 0) {
     //     bgMove = false;
@@ -204,7 +218,10 @@ void single_player() {
     //     camY = constrain(camY, 0, bgH - screenH);
     // }
 
-    rect(player_x, player_y, 100,100);
+    detect_draw_platforms();
+
+
+    rect(player_x, player_y, player_w, player_h);
     switch (level) {
         case ONE:
             break;
@@ -217,4 +234,56 @@ void single_player() {
         case NONE:
             break;
     }
+}
+
+void setPlatforms() {
+    add_platform(1000, height-cellH-100, 100, 10);
+    add_platform(200, height-cellH-100, 100, 10);
+}
+
+void detect_draw_platforms() {
+       for (Integer id : hitboxes.keySet()) {
+      Object[] data = hitboxes.get(id);
+
+    //   log("INFO", "Hitboxes: " + data[0] +  "|" + data[1]);
+      int x = (Integer)data[0];
+      int y=(Integer) data[1];
+      int x2= (Integer)data[2];
+      int y2 = (Integer)data[3];
+    // log("INFO", "camx" + camX + "| x,y" + x + "," + y);
+      fill(255,0,0);
+      rect(x,y,x2-x, y2-y);
+      if (player_x + player_w > x && player_x < x2 && player_y+player_h >y && player_y + player_h <y2) {
+        player_y = y-player_h;
+        playerYVelocity = 0;
+        jumping = false;
+      }
+      log("1234", "px py x2 y2 y" + player_x + "|" + player_y + "|" + x2 + "|" +y2 + "|" +y);
+        if (bgMove) {
+            actual_player_x = player_x + camX;
+            actual_player_y = (height - player_y - player_h) - cellH;
+        } else  {
+            actual_player_x = player_x;
+            actual_player_y = (height - player_y - player_h) - cellH;
+    }
+      if ( actual_player_x < x2 && actual_player_x > x2-20 && (player_y > y && player_y < y2 || player_y + player_h >y && player_y + player_h < y2)) {
+        player_x = x2;
+        println("DETECT HIT");
+        movingLeft = false;
+      }
+
+    //   if (player_x < x && player_y + player_h > y || player_y >  y && player_y  < y2)
+
+  }
+}
+int og_pos_x, og_pos_y, og_w, og_h;
+void update_platforms() {
+    // log("INFO", "camx" + camX);
+     for (Integer id : hitboxes.keySet()) {
+      Object[] data = hitboxes.get(id);
+    data[0] = (Integer) data[4] - camX;
+    data[1] = (Integer) data[5] - camY + ( bgH - screenH);
+    data[2] = (Integer) data[0] + (Integer)data[6];
+    data[3] = (Integer) data[1] + (Integer)data[7];
+   }
 }

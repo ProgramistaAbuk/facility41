@@ -6,6 +6,7 @@ enum Level {
   ONE,TWO,THREE,FOUR, NONE
 }
 
+
 Level level = Level.NONE;
 
 Screen screen = Screen.MAIN_MENU;
@@ -26,6 +27,7 @@ void setup() {
   levels_setup();
   credits_setup();
   single_player_setup();
+  setPlatforms();
 
   diff_map.put(0, "Easy");
   diff_map.put(1, "Medium");
@@ -38,53 +40,62 @@ float acceleration = 1.5; // How fast you speed up
 float friction = 0.82;     // How fast you slow down (0.0 = instant stop, 1.0 = ice)
 float maxSpeed = 10;       // Speed limit
 void draw() {
-jump();
+  jump();
 
-// 1. Calculate target velocity based on keys pressed
-if (movingRight) moveXVelocity += acceleration;
-if (movingLeft)  moveXVelocity -= acceleration;
-if (movingDown)  moveYVelocity += acceleration;
-if (movingUp)    moveYVelocity -= acceleration;
+  // if (player_y+player_h >= )
 
-// 2. Apply passive friction so they smoothly slide to a stop when keys are released
-if (!movingRight && !movingLeft) moveXVelocity *= friction;
-if (!movingDown && !movingUp)    moveYVelocity *= friction;
+  // if (player_y >= floorY) {
+  //   player_y = floorY;     // Snap to exact floor position
+  //   playerYVelocity = 0;   // Stop moving downward
+  //   jumping = false;       // Reset jumping state flag
+  // }
 
-// 3. Keep the speeds within your designated max speed limit
-moveXVelocity = constrain(moveXVelocity, -maxSpeed, maxSpeed);
-moveYVelocity = constrain(moveYVelocity, -maxSpeed, maxSpeed);
+  // 1. Calculate target velocity based on keys pressed
+  if (movingRight) moveXVelocity += acceleration;
+  if (movingLeft)  moveXVelocity -= acceleration;
+  if (movingDown)  moveYVelocity += acceleration;
+  if (movingUp)    moveYVelocity -= acceleration;
 
-// 4. Your exact structural check, now completely smooth!
-if (bgMove) {
-  // Apply the velocity to the Camera
-  camX += moveXVelocity;
-  camY += moveYVelocity;
-  
-  camX = constrain(camX, 0, bgW - screenW);
-  camY = constrain(camY, 0, bgH - screenH);
-} else {
-  // Apply the velocity to the Player
-  player_x += moveXVelocity;
-  player_y += moveYVelocity;
-}
-  switch (screen) {
-    case MAIN_MENU:
-      menu();
-      break;
-    case SINGLE_PLAYER:
-      single_player();
-      break;
-    case LEVELS:
-      levels();
-      break;
-    case MULTI_PLAYER_CREATE:
-      mp_c();
-      break;
-    case CREDITS:
-      credits();
-      break;
+  // 2. Apply passive friction so they smoothly slide to a stop when keys are released
+  if (!movingRight && !movingLeft) moveXVelocity *= friction;
+  if (!movingDown && !movingUp)    moveYVelocity *= friction;
 
-    }
+  // 3. Keep the speeds within your designated max speed limit
+  moveXVelocity = constrain(moveXVelocity, -maxSpeed, maxSpeed);
+  moveYVelocity = constrain(moveYVelocity, -maxSpeed, maxSpeed);
+
+  // 4. Your exact structural check, now completely smooth!
+  if (bgMove) {
+    // Apply the velocity to the Camera
+    camX += moveXVelocity;
+    camY += moveYVelocity;
+    
+    camX = constrain(camX, 0, bgW - screenW);
+    camY = constrain(camY, 0, bgH - screenH);
+  } else {
+    // Apply the velocity to the Player
+    player_x += moveXVelocity;
+    player_y += moveYVelocity;
+
+  }
+    switch (screen) {
+      case MAIN_MENU:
+        menu();
+        break;
+      case SINGLE_PLAYER:
+        single_player();
+        break;
+      case LEVELS:
+        levels();
+        break;
+      case MULTI_PLAYER_CREATE:
+        mp_c();
+        break;
+      case CREDITS:
+        credits();
+        break;
+
+      }
 }
 
 
@@ -103,7 +114,7 @@ void keyReleased() {
 
 void keyPressed() {
   Object[] btn = (Object[]) mp_buttons.get("pass");
-  log("INFO", "MOVING key, camX, camY, playerX, playerY" + key + "|" + camX + "|" + camY + "|" + player_x + "|" + player_y);
+  // log("INFO", "MOVING key, camX, camY, playerX, playerY" + key + "|" + camX + "|" + camY + "|" + player_x + "|" + player_y);
   if (key == 'd' || keyCode == RIGHT) {
     movingRight = true;
     if  (camX == maxCamX) {

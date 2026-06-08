@@ -1,3 +1,6 @@
+HashMap<Integer, Object[]> hitboxes = new HashMap<Integer, Object[]>();
+
+
 void log(String status, String msg) {
   println("[" + hour() + ":" + minute() + ":" + second() + "." + millis() + "] " + status + " || " + msg);
 }
@@ -114,14 +117,17 @@ void jump() {
   player_y += playerYVelocity;
   
   // 3. Check for floor collision (so they don't fall forever)
-  float floorY = height - 100 - cellH;
+  float floorY = height - player_h - cellH;
+
   if (player_y >= floorY) {
     player_y = floorY;     // Snap to exact floor position
     playerYVelocity = 0;   // Stop moving downward
     jumping = false;       // Reset jumping state flag
   }
 }
-
+int platforms = 0;
 void add_platform (int x, int y, int w, int h) {
-  
+    platforms++;
+    hitboxes.put(platforms, new Object[]{x,y,x+w,y+h, x,y,w,h});
+
 }
