@@ -100,14 +100,14 @@ float player_x, player_y;
 float player_w = 100;
 float player_h = 100;
 void single_player_setup() {
-    player_x = (width / 2) - player_w/2;   // centered: subtract half the rect width
+    player_x = (width / 2) - player_w/2;  
     player_y = height - player_h - cellH;
     screenW = displayWidth;
     screenH = displayHeight;
     cellW = screenW / cols;
     cellH = screenH / rows;
-    bgW = screenW * bgCols;  // total background width
-    bgH = screenH * bgRows;  // total background height
+    bgW = screenW * bgCols;  
+    bgH = screenH * bgRows; 
     camX = 0;
     camY = bgH - screenH; // 3240 - 1080 = 2160
     maxCamX = bgW - screenW; 
@@ -120,16 +120,15 @@ int cellW = 0;
 int cellH = 0;
 int bgCols = 5;
 int bgRows = 3;
-int bgW = 0;  // total background width
-int bgH = 0;  // total background height
+int bgW = 0; 
+int bgH = 0;  
 int maxCamX;
 
-// Camera offset (how much the background is shifted)
 int camX = 0;
 int camY = 0; // 3240 - 1080 = 2160
 void drawBackground() {
     pushMatrix();
-    translate(-camX, -camY);  // shift entire background by camera
+    translate(-camX, -camY);  
 
     for (int row = 0; row < rows * bgRows; row++) {
         for (int col = 0; col < cols * bgCols; col++) {
@@ -258,7 +257,7 @@ void detect_draw_platforms() {
         playerYVelocity = 0;
         jumping = false;
       }
-      log("1234", "px py x2 y2 y" + player_x + "|" + player_y + "|" + x2 + "|" +y2 + "|" +y);
+    //   log("1234", "px py x2 y2 y" + player_x + "|" + player_y + "|" + x2 + "|" +y2 + "|" +y);
         if (bgMove) {
             actual_player_x = player_x + camX;
             actual_player_y = (height - player_y - player_h) - cellH;
@@ -266,11 +265,24 @@ void detect_draw_platforms() {
             actual_player_x = player_x;
             actual_player_y = (height - player_y - player_h) - cellH;
     }
-      if ( actual_player_x < x2 && actual_player_x > x2-20 && (player_y > y && player_y < y2 || player_y + player_h >y && player_y + player_h < y2)) {
-        player_x = x2;
-        println("DETECT HIT");
-        movingLeft = false;
-      }
+    // println("px=" + player_x + " py=" + player_y + " ph=" + player_h + 
+    //     " x=" + x + " y=" + y + " x2=" + x2 + " y2=" + y2 +
+    //     " movingLeft=" + movingLeft + " movingRight=" + movingRight +
+    //     " overlap=" + (player_y + player_h > y + 2 && player_y < y2));
+boolean onTop = (player_y + player_h <= y + 2);
+
+
+if (!onTop && movingLeft && player_x < x2 && player_x > x - player_w &&
+    player_y + player_h > y + 2 && player_y < y2) {
+    player_x = x2;
+    movingLeft = false;
+}
+ 
+if (!onTop && movingRight && player_x + player_w > x && player_x + player_w < x2 + player_w &&
+    player_y + player_h > y + 2 && player_y < y2) {
+    player_x = x - player_w;
+    movingRight = false;
+}
 
     //   if (player_x < x && player_y + player_h > y || player_y >  y && player_y  < y2)
 
